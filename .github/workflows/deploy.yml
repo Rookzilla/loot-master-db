@@ -1,9 +1,9 @@
-name: Deploy CDK Stack
+name: Deploy
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
@@ -29,7 +29,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-2  # Adjust the region as needed
+          aws-region: eu-west-2
 
       - name: Deploy CDK stack
         run: cdk deploy --require-approval never
