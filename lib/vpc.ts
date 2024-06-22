@@ -1,10 +1,11 @@
-import * as cdk from '@aws-cdk/core';
-import * as ec2 from '@aws-cdk/aws-ec2';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
-export class VpcStack extends cdk.Construct {
-  public readonly vpc: ec2.Vpc;
+export class VpcStack extends Construct {
+  public readonly vpc: ec2.IVpc;
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id);
 
     this.vpc = new ec2.Vpc(this, 'MyVpc', {

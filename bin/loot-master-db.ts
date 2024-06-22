@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import * as cdk from '@aws-cdk/core';
+import 'source-map-support/register';
+import * as cdk from 'aws-cdk-lib';
 import { LootMasterDbStack } from '../lib/loot-master-db-stack';
 
 const app = new cdk.App();

@@ -1,9 +1,10 @@
-import * as cdk from '@aws-cdk/core';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 import { VpcStack } from './vpc';
 import { RdsStack } from './rds';
 
 export class LootMasterDbStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     // Create VPC
@@ -16,7 +17,7 @@ export class LootMasterDbStack extends cdk.Stack {
 
     // Output the RDS instance endpoint
     new cdk.CfnOutput(this, 'MyRdsEndpoint', {
-      value: rdsInstanceStack.instance.dbInstanceEndpointAddress,
+      value: rdsInstanceStack.instance.dbInstanceEndpointAddress!,
     });
   }
 }
