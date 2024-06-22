@@ -47,9 +47,9 @@ export class LootMasterDbStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       deletionProtection: false,
       databaseName: 'lootmasterrdsdb',
-      allocatedStorage: 3,
+      allocatedStorage: 10,
       backupRetention: cdk.Duration.days(0),
-      maxAllocatedStorage: 3,
+      maxAllocatedStorage: 10,
       credentials: rds.Credentials.fromSecret(this.lootmasteradminSecret),
     });
   }
