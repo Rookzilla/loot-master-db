@@ -21,7 +21,7 @@ export class LootMasterDbStack extends cdk.Stack {
     this.lootmasteradminSecret = new secretsmanager.Secret(this, 'LootMasterAdminSecret', {
       secretName: 'lootmasteradmin-password',
       generateSecretString: {
-        secretStringTemplate: JSON.stringify({ username: 'admin' }),
+        secretStringTemplate: JSON.stringify({ username: 'lootmasteradmin' }),
         generateStringKey: 'password',
         excludePunctuation: true,
         includeSpace: false,
