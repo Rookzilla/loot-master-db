@@ -15,7 +15,7 @@ export class RdsStack extends Construct {
 
     this.instance = new rds.DatabaseInstance(this, 'LootMasterRDSInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
-        version: rds.PostgresEngineVersion.VER_16_3,
+        version: rds.PostgresEngineVersion.VER_14,
       }),
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
       vpc: props.vpc,
