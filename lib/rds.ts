@@ -13,16 +13,28 @@ export class RdsStack extends Construct {
   constructor(scope: Construct, id: string, props: RdsInstanceProps) {
     super(scope, id);
 
+    const vpc = props.vpc;
+
     this.instance = new rds.DatabaseInstance(this, 'LootMasterRDSInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_14,
       }),
-      instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE2, ec2.InstanceSize.MICRO),
-      vpc: props.vpc,
+      instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+      vpc,
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC
+        },
+      multiAz: false,
+
       removalPolicy: cdk.RemovalPolicy.DESTROY,
       deletionProtection: false,
       databaseName: 'lootmasterrdsdb',
-      allocatedStorage: 2,
+      allocatedStorage: 3,
+      backupRetention: cdk.Duration.days(0),
+      maxAllocatedStorage: 3,
+      credentials: rds.Credentials.fromUsername('lootmasteradmin', {
+        password : cdk.SecretValue.secretsManager('lootmasteradmin-password', { jsonField: 'lootmasteradmin-password' }),
+        }) 
     });
   }
 }
