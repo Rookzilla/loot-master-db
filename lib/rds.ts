@@ -2,23 +2,21 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 
-interface RdsInstanceProps extends cdk.StackProps {
+interface RdsProps extends cdk.StackProps {
   vpc: ec2.IVpc;
+  lootmasteradminSecret: secretsmanager.ISecret;
 }
 
-export class Rds extends Construct {
+export class RdsStack extends cdk.Stack {
   public readonly instance: rds.DatabaseInstance;
 
-  constructor(scope: Construct, id: string, props: RdsInstanceProps) {
-    super(scope, id);
+  constructor(scope: Construct, id: string, props: RdsProps) {
+    super(scope, id, props);
 
     const vpc = props.vpc;
-
-    // Fetch the secret value from AWS Secrets Manager
-    const secret = cdk.SecretValue.secretsManager('lootmasteradmin-password', {
-      jsonField: 'lootmasteradmin-password',
-    });
+    const lootmasteradminSecret = props.lootmasteradminSecret;
 
     this.instance = new rds.DatabaseInstance(this, 'LootMasterRDSInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
@@ -34,7 +32,7 @@ export class Rds extends Construct {
       allocatedStorage: 3,
       backupRetention: cdk.Duration.days(0),
       maxAllocatedStorage: 3,
-      credentials: rds.Credentials.fromPassword('lootmasteradmin', secret),
+      credentials: rds.Credentials.fromSecret(lootmasteradminSecret),
     });
   }
 }

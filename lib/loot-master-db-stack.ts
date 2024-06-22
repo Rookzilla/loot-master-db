@@ -1,7 +1,8 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import { Rds } from './rds'; // Adjust import path as per your project structure
+import { RdsStack } from './rds'; // Adjust import path as per your project structure
+import { SecretsManagerStack } from './secretsManager'; // Adjust import path as per your project structure
 
 export class LootMasterDbStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -12,9 +13,13 @@ export class LootMasterDbStack extends cdk.Stack {
       maxAzs: 2, // Use 2 Availability Zones
     });
 
+    // Create Secrets Manager stack to retrieve secret
+    const secretsManagerStack = new SecretsManagerStack(this, 'MySecretsManagerStack');
+
     // Example: Create RDS instance
-    new Rds(this, 'MyRdsInstance', {
+    new RdsStack(this, 'MyRdsInstance', {
       vpc,
+      lootmasteradminSecret: secretsManagerStack.lootmasteradminSecret,
     });
   }
 }
