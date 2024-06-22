@@ -1,16 +1,22 @@
-import * as cdk from 'aws-cdk-lib';
-import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as cdk from '@aws-cdk/core';
+import { VpcStack } from './vpc';
+import { RdsStack } from './rds';
 
 export class LootMasterDbStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    // Create VPC
+    const vpcStack = new VpcStack(this, 'VpcStack');
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'LootMasterDbQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    // Create RDS Instance
+    const rdsInstanceStack = new RdsStack(this, 'RdsStack', {
+      vpc: vpcStack.vpc,
+    });
+
+    // Output the RDS instance endpoint
+    new cdk.CfnOutput(this, 'MyRdsEndpoint', {
+      value: rdsInstanceStack.instance.dbInstanceEndpointAddress,
+    });
   }
 }
